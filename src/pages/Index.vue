@@ -1,7 +1,7 @@
 <template>
-  <div class="row col">
+  <div class="row">
     <!-- LIST -->
-    <div class="column full-height rounded-borders" style="width: 400px">
+    <div class="column rounded-borders" style="width: 400px">
       <div class="column bg-white">
         <q-input outlined dense placeholder="Rechercher" class="q-ma-sm" v-model="filter" clearable @update:model-value="savefilter($event)">
           <template v-slot:prepend>
@@ -13,21 +13,21 @@
           <q-btn round flat dense :color="numeric ? 'primary' : 'black'" :icon="numeric ? 'mdi-sort-numeric-ascending' : 'mdi-sort-numeric-descending'" @click="order('numeric')" />
         </div>
       </div>
-      <q-list class="col full-width scroll" v-if="movies && movies.length">
+      <q-list class="col full-width scroll" v-if="movies && movies.length > 0">
         <q-item clickable class="rounded-borders bg-white q-mb-sm q-mx-sm" style="height: 80px" v-for="(movie, idx) in movies" :key="idx" @click="select(movie)" :class="{ 'selected': edited === movie.id }">
           <q-item-section avatar>
             <q-img :src="movie.posterUrl" />
           </q-item-section>
           <q-item-section>
-            <q-item-label class="text-bold">{{ movie.title }} - {{ movie.year }}</q-item-label>
-            <q-item-label caption>{{ movie.director }}</q-item-label>
+            <q-item-label lines="1" class="text-bold">{{ movie.title }} - {{ movie.year }}</q-item-label>
+            <q-item-label lines="1" caption>{{ movie.director }}</q-item-label>
           </q-item-section>
           <q-item-section avatar>
             <q-btn round flat icon="delete" color="negative" @click.stop="remove(movie)" v-if="movie.id" />
           </q-item-section>
         </q-item>
       </q-list>
-      <div class="col column items-center justify-center q-pa-md text-bold">
+      <div class="col column items-center justify-center q-pa-md text-bold" v-else>
         Il n'y a pas de film dans la liste
       </div>
       <div class="row q-pa-sm">
