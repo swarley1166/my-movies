@@ -14,7 +14,7 @@
         </div>
       </div>
       <q-list class="col full-width scroll" v-if="movies && movies.length">
-        <q-item clickable class="rounded-borders bg-white q-mb-sm q-mx-sm" v-for="(movie, idx) in movies" :key="idx" @click="select(movie)" :class="{ 'selected': edited === movie.id }">
+        <q-item clickable class="rounded-borders bg-white q-mb-sm q-mx-sm" style="height: 80px" v-for="(movie, idx) in movies" :key="idx" @click="select(movie)" :class="{ 'selected': edited === movie.id }">
           <q-item-section avatar>
             <q-img :src="movie.posterUrl" />
           </q-item-section>
@@ -58,7 +58,7 @@ export default {
     const $router = useRouter()
     const $q = useQuasar()
 
-    const filter = ref($q.localStorage.has('filter') ? $q.localStorage.getItem('filter') : null)
+    const filter = ref($q.localStorage.has('filter') ? $q.localStorage.getItem('filter') : '')
     const alpha = computed(() => $moviesStore.alpha)
     const numeric = computed(() => $moviesStore.numeric)
     const edited = computed(() => $moviesStore.edited.id)
