@@ -1,18 +1,18 @@
 <template>
-  <q-form @submit="save">
-    <div class="col scroll">
+  <q-form class="col column" @submit="save">
+    <div class="col scroll q-mb-md">
       <div class="row rounded-borders items-center q-pa-md q-mb-md bg-white">
         <q-img class="cursor-pointer" width="10%" height="10%" :src="movie.posterUrl || 'https://c0.lestechnophiles.com/www.numerama.com/wp-content/uploads/2013/07/AtTheMovies.jpg'" @click="updatePoster">
           <q-tooltip>Cliquer pour ajouter ou modifier l'affiche</q-tooltip>
         </q-img>
-        <q-input class="q-ml-md col self-start" dense outlined :rules="[val => val.length > 0 || 'Le titre est obligatoire']" v-model="movie.title" />
+        <q-input class="q-ml-md col self-start" dense outlined :rules="[val => val && val.length > 0 || 'Le titre est obligatoire']" v-model="movie.title" />
       </div>
       <div class="column rounded-borders q-pa-md q-mb-md bg-white">
         <div class="text-h6 q-mb-sm">Données</div>
         <div class="row items-center col q-mb-sm">
           <div class="row items-center">
             <div class="q-field--with-bottom">Année de sortie: </div>
-            <q-input class="q-ml-md" dense outlined :rules="[val => val.length > 0 || 'L\'année est obligatoire']" v-model="movie.year" />
+            <q-input class="q-ml-md" dense outlined :rules="[val => val && val.length > 0 || 'L\'année est obligatoire']" v-model="movie.year" />
           </div>
           <div class="row items-center q-ml-md">
             <div class="q-field--with-bottom">Durée: </div>
@@ -20,7 +20,7 @@
           </div>
           <div class="row items-center q-ml-md">
             <div class="q-field--with-bottom">Réalisateur: </div>
-            <q-input class="q-ml-md" dense outlined :rules="[val => val.length > 0 || 'Le réalisateur est obligatoire']" v-model="movie.director" />
+            <q-input class="q-ml-md" dense outlined :rules="[val => val && val.length > 0 || 'Le réalisateur est obligatoire']" v-model="movie.director" />
           </div>
         </div>
         <div class="row items-center col q-mb-sm">

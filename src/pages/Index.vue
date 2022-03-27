@@ -1,7 +1,7 @@
 <template>
-  <div class="row">
+  <div>
     <!-- LIST -->
-    <div class="column rounded-borders" style="width: 400px">
+    <div class="column full-height rounded-borders" style="width: 400px">
       <div class="column bg-white">
         <q-input outlined dense placeholder="Rechercher" class="q-ma-sm" v-model="filter" clearable @update:model-value="savefilter($event)">
           <template v-slot:prepend>
@@ -9,12 +9,14 @@
           </template>
         </q-input>
         <div class="row">
-          <q-btn round flat dense :color="alpha ? 'primary' : 'black'" :icon="alpha ? 'mdi-sort-alphabetical-ascending' : 'mdi-sort-alphabetical-descending'" @click="order('alpha')" />
-          <q-btn round flat dense :color="numeric ? 'primary' : 'black'" :icon="numeric ? 'mdi-sort-numeric-ascending' : 'mdi-sort-numeric-descending'" @click="order('numeric')" />
+          <q-btn round flat dense :color="moviesStore.alpha ? 'primary' : 'black'" :icon="'mdi-sort-alphabetical-ascending'" @click="order('alpha')" />
+          <q-btn round flat dense :color="moviesStore.numeric ? 'primary' : 'black'" :icon="'mdi-sort-numeric-ascending'" @click="order('numeric')" />
         </div>
       </div>
-      <q-list class="col full-width scroll" v-if="movies && movies.length > 0">
-        <q-item clickable class="rounded-borders bg-white q-mb-sm q-mx-sm" style="height: 80px" v-for="(movie, idx) in movies" :key="idx" @click="select(movie)" :class="{ 'selected': edited === movie.id }">
+
+      <q-virtual-scroll class="col full-width scroll" :virtual-scroll-item-size="80" :virtual-scroll-sticky-size-start="80" :items="movies" v-if="movies && movies.length > 0">
+      <template v-slot="{ item: movie, index: idx }">
+        <q-item :id="`movie_${movie.id}`" clickable class="rounded-borders bg-white q-mb-sm q-mx-sm" style="height: 80px" :key="idx" @click="select(movie)" :class="{ 'selected': moviesStore.edited.id === movie.id }">
           <q-item-section avatar>
             <q-img :src="movie.posterUrl" />
           </q-item-section>
@@ -26,7 +28,8 @@
             <q-btn round flat icon="delete" color="negative" @click.stop="remove(movie)" v-if="movie.id" />
           </q-item-section>
         </q-item>
-      </q-list>
+      </template>
+      </q-virtual-scroll>
       <div class="col column items-center justify-center q-pa-md text-bold" v-else>
         Il n'y a pas de film dans la liste
       </div>
@@ -35,7 +38,7 @@
       </div>
     </div>
     <!-- DETAIL -->
-    <div class="column col q-ml-md">
+    <div class="column col full-height q-ml-md">
       <router-view />
     </div>
   </div>
@@ -59,31 +62,22 @@ export default {
     const $q = useQuasar()
 
     const filter = ref($q.localStorage.has('filter') && $q.localStorage.getItem('filter') !== 'null' ? $q.localStorage.getItem('filter') : '')
-    const alpha = computed(() => $moviesStore.alpha)
-    const numeric = computed(() => $moviesStore.numeric)
-    const edited = computed(() => $moviesStore.edited.id)
 
     const movies = computed(() => {
-      const filtered = []
-      const alphaSort = $moviesStore.alpha
-      const numericSort = $moviesStore.numeric
+      let filtered = $moviesStore.collection
       if (filter.value) {
         const sanfilter = filterFormatter(filter.value)
-        $moviesStore.collection.forEach(m => {
+        filtered = $moviesStore.collection.filter(m => {
           const title = filterFormatter(m.title)
           const year = m.year
           const director = filterFormatter(m.director)
-          if (title.includes(sanfilter) || year.includes(filter.value) || director.includes(sanfilter)) filtered.push(m)
+          return (title.includes(sanfilter) || year.includes(filter.value) || director.includes(sanfilter))
         })
-        if (alphaSort && !numericSort) return orderBy(filtered, ['title'], ['asc'])
-        if (!alphaSort && numericSort) return orderBy(filtered, ['year'], ['asc'])
-        if (alphaSort && numericSort) return orderBy(filtered, ['year', 'title'], ['asc', 'asc'])
-        return filtered
       }
-      if (alphaSort && !numericSort) return orderBy($moviesStore.collection, ['title'], ['asc'])
-      if (!alphaSort && numericSort) return orderBy($moviesStore.collection, ['year'], ['asc'])
-      if (alphaSort && numericSort) return orderBy($moviesStore.collection, ['year', 'title'], ['asc', 'asc'])
-      return $moviesStore.collection
+      if ($moviesStore.alpha && !$moviesStore.numeric) return orderBy(filtered, ['title'], ['asc'])
+      if (!$moviesStore.alpha && $moviesStore.numeric) return orderBy(filtered, ['year'], ['asc'])
+      if ($moviesStore.alpha && $moviesStore.numeric) return orderBy(filtered, ['year', 'title'], ['asc', 'asc'])
+      return filtered
     })
 
     const select = (movie) => {
@@ -116,11 +110,9 @@ export default {
     }
 
     return {
-      alpha,
       filter,
       movies,
-      numeric,
-      edited,
+      moviesStore: $moviesStore,
       add,
       order,
       remove,

@@ -1,5 +1,5 @@
 <template>
-  <div class="absolute-fit">
+  <div class="absolute-fit my-layout">
     <q-layout view="hHr Lpr lFf" class="absolute-fit">
       <q-header>
         <q-toolbar>
@@ -9,9 +9,9 @@
         </q-toolbar>
       </q-header>
 
-      <q-page-container class="relative-position absolute-fit column" style="background-color: #F3F3F3">
-        <q-page class="col row">
-          <router-view class="q-pa-md col relative-position" v-if="loaded" />
+      <q-page-container class="relative-position absolute-fit column bg-color-router-view">
+        <q-page class="col column">
+          <router-view class="row col q-pa-md bg-color-router-view my-router-view relative-position" v-if="loaded" />
         </q-page>
       </q-page-container>
     </q-layout>
@@ -40,3 +40,6 @@ export default {
   }
 }
 </script>
+
+<style lang="sass">
+</style>
