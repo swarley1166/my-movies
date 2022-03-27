@@ -20,7 +20,8 @@ export const useMoviesStore = defineStore('movies', {
     },
     loaded: false,
     alpha: LocalStorage.has('sort_alpha') ? LocalStorage.getItem('sort_alpha') : true,
-    numeric: LocalStorage.has('sort_numeric') ? LocalStorage.getItem('sort_numeric') : false
+    numeric: LocalStorage.has('sort_numeric') ? LocalStorage.getItem('sort_numeric') : false,
+    defaultPoster: 'https://c0.lestechnophiles.com/www.numerama.com/wp-content/uploads/2013/07/AtTheMovies.jpg'
   }),
   actions: {
     async getMovies () {

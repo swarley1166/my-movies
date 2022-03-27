@@ -18,7 +18,7 @@
       <template v-slot="{ item: movie, index: idx }">
         <q-item :id="`movie_${movie.id}`" clickable class="rounded-borders bg-white q-mb-sm q-mx-sm" style="height: 80px" :key="idx" @click="select(movie)" :class="{ 'selected': moviesStore.edited.id === movie.id }">
           <q-item-section avatar>
-            <q-img :src="movie.posterUrl" />
+            <q-img :src="movie.posterUrl || moviesStore.defaultPoster" :placeholder-src="moviesStore.defaultPoster" alt="Affiche non disponnible" />
           </q-item-section>
           <q-item-section>
             <q-item-label lines="1" class="text-bold">{{ movie.title }} - {{ movie.year }}</q-item-label>

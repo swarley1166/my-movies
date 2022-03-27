@@ -1,8 +1,8 @@
 <template>
   <q-form class="col column" @submit="save">
-    <div class="col scroll q-mb-md">
+    <div class="col scroll q-mb-sm">
       <div class="row rounded-borders items-center q-pa-md q-mb-md bg-white">
-        <q-img class="cursor-pointer" width="10%" height="10%" :src="movie.posterUrl || 'https://c0.lestechnophiles.com/www.numerama.com/wp-content/uploads/2013/07/AtTheMovies.jpg'" @click="updatePoster">
+        <q-img class="cursor-pointer" width="10%" height="10%" :src="movie.posterUrl || moviesStore.defaultPoster" :placeholder-src="moviesStore.defaultPoster" alt="Affiche non disponnible" @click="updatePoster">
           <q-tooltip>Cliquer pour ajouter ou modifier l'affiche</q-tooltip>
         </q-img>
         <q-input class="q-ml-md col self-start" dense outlined :rules="[val => val && val.length > 0 || 'Le titre est obligatoire']" v-model="movie.title" />
@@ -113,6 +113,7 @@ export default {
     return {
       genres,
       movie,
+      moviesStore: $moviesStore,
       close,
       save,
       remove,
