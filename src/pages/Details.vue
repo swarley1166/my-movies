@@ -2,7 +2,9 @@
   <q-form @submit="save">
     <div class="col scroll">
       <div class="row rounded-borders items-center q-pa-md q-mb-md bg-white">
-        <q-img class="cursor-pointer" width="10%" height="10%" :src="movie.posterUrl || 'https://c0.lestechnophiles.com/www.numerama.com/wp-content/uploads/2013/07/AtTheMovies.jpg'" @click="updatePoster" />
+        <q-img class="cursor-pointer" width="10%" height="10%" :src="movie.posterUrl || 'https://c0.lestechnophiles.com/www.numerama.com/wp-content/uploads/2013/07/AtTheMovies.jpg'" @click="updatePoster">
+          <q-tooltip>Cliquer pour ajouter ou modifier l'affiche</q-tooltip>
+        </q-img>
         <q-input class="q-ml-md col self-start" dense outlined :rules="[val => val.length > 0 || 'Le titre est obligatoire']" v-model="movie.title" />
       </div>
       <div class="column rounded-borders q-pa-md q-mb-md bg-white">
@@ -25,10 +27,10 @@
           <div class="q-field--with-bottom">Acteurs: </div>
           <q-input class="q-field--with-bottom col q-ml-md" dense outlined v-model="movie.actors" />
         </div>
-        <div class="column">
-          <div>Genres: </div>
-          <q-option-group class="row" v-model="movie.genres" :options="genres" type="checkbox" />
-        </div>
+      </div>
+      <div class="column rounded-borders q-pa-md q-mb-md bg-white">
+        <div class="text-h6 q-mb-sm">Genre</div>
+        <q-option-group class="row" v-model="movie.genres" :options="genres" type="checkbox" />
       </div>
       <div class="column rounded-borders q-pa-md q-mb-md bg-white">
         <div class="text-h6 q-mb-sm">Intrigue</div>
