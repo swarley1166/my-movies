@@ -58,7 +58,7 @@ export default {
     const $router = useRouter()
     const $q = useQuasar()
 
-    const filter = ref($q.localStorage.has('filter') ? $q.localStorage.getItem('filter') : '')
+    const filter = ref($q.localStorage.has('filter') && $q.localStorage.getItem('filter') !== 'null' ? $q.localStorage.getItem('filter') : '')
     const alpha = computed(() => $moviesStore.alpha)
     const numeric = computed(() => $moviesStore.numeric)
     const edited = computed(() => $moviesStore.edited.id)
