@@ -1,13 +1,13 @@
 <template>
   <q-form class="col column" @submit="save">
     <div class="col scroll q-mb-sm">
-      <div class="row rounded-borders items-center q-pa-md q-mb-md bg-white">
+      <div class="row rounded-borders items-center q-pa-md q-mb-md" :class="{ 'bg-white': !dark }">
         <q-img class="cursor-pointer" width="10%" height="10%" :src="movie.posterUrl || moviesStore.defaultPoster" :placeholder-src="moviesStore.defaultPoster" alt="Affiche non disponnible" @click="updatePoster">
           <q-tooltip>Cliquer pour ajouter ou modifier l'affiche</q-tooltip>
         </q-img>
         <q-input class="q-ml-md col self-start" dense outlined :rules="[val => val && val.length > 0 || 'Le titre est obligatoire']" v-model="movie.title" />
       </div>
-      <div class="column rounded-borders q-pa-md q-mb-md bg-white">
+      <div class="column rounded-borders q-pa-md q-mb-md" :class="{ 'bg-white': !dark }">
         <div class="text-h6 q-mb-sm">Données</div>
         <div class="row items-center col q-mb-sm">
           <div class="row items-center">
@@ -28,16 +28,16 @@
           <q-input class="q-field--with-bottom col q-ml-md" dense outlined v-model="movie.actors" />
         </div>
       </div>
-      <div class="column rounded-borders q-pa-md q-mb-md bg-white">
+      <div class="column rounded-borders q-pa-md q-mb-md" :class="{ 'bg-white': !dark }">
         <div class="text-h6 q-mb-sm">Genre</div>
         <q-option-group class="row" v-model="movie.genres" :options="genres" type="checkbox" />
       </div>
-      <div class="column rounded-borders q-pa-md q-mb-md bg-white">
+      <div class="column rounded-borders q-pa-md q-mb-md" :class="{ 'bg-white': !dark }">
         <div class="text-h6 q-mb-sm">Intrigue</div>
         <q-input class="q-ml-md" type="textarea" dense outlined v-model="movie.plot" />
       </div>
     </div>
-    <div class="row rounded-borders q-pa-md items-center bg-white">
+    <div class="row rounded-borders q-pa-md items-center" :class="{ 'bg-white': !dark }">
       <q-btn round flat icon="delete" color="negative" @click="remove" v-if="movie.id" />
       <q-space />
       <q-btn no-caps outline class="q-mr-md" label="Fermer" @click="close" />
@@ -64,6 +64,7 @@ export default {
 
     const movie = computed(() => $moviesStore.edited)
     const genres = computed(() => $moviesStore.genres)
+    const dark = computed(() => $q.dark.isActive)
 
     const save = async () => {
       if (movie.value.id) {
@@ -111,6 +112,7 @@ export default {
     }, { immediate: true })
 
     return {
+      dark,
       genres,
       movie,
       moviesStore: $moviesStore,

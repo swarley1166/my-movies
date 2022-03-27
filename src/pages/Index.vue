@@ -2,21 +2,21 @@
   <div>
     <!-- LIST -->
     <div class="column full-height rounded-borders" style="width: 400px">
-      <div class="column bg-white">
+      <div class="column" :class="{ 'bg-white': !dark }">
         <q-input outlined dense placeholder="Rechercher" class="q-ma-sm" v-model="filter" clearable @update:model-value="savefilter($event)">
           <template v-slot:prepend>
             <q-icon name="search" />
           </template>
         </q-input>
         <div class="row">
-          <q-btn round flat dense :color="moviesStore.alpha ? 'primary' : 'black'" :icon="'mdi-sort-alphabetical-ascending'" @click="order('alpha')" />
-          <q-btn round flat dense :color="moviesStore.numeric ? 'primary' : 'black'" :icon="'mdi-sort-numeric-ascending'" @click="order('numeric')" />
+          <q-btn round flat dense :color="moviesStore.alpha ? 'primary' : ''" :icon="'mdi-sort-alphabetical-ascending'" @click="order('alpha')" />
+          <q-btn round flat dense :color="moviesStore.numeric ? 'primary' : ''" :icon="'mdi-sort-numeric-ascending'" @click="order('numeric')" />
         </div>
       </div>
 
       <q-virtual-scroll class="col full-width scroll" :virtual-scroll-item-size="80" :virtual-scroll-sticky-size-start="80" :items="movies" v-if="movies && movies.length > 0">
       <template v-slot="{ item: movie, index: idx }">
-        <q-item :id="`movie_${movie.id}`" clickable class="rounded-borders bg-white q-mb-sm q-mx-sm" style="height: 80px" :key="idx" @click="select(movie)" :class="{ 'selected': moviesStore.edited.id === movie.id }">
+        <q-item :id="`movie_${movie.id}`" clickable class="rounded-borders q-mb-sm q-mx-sm" style="height: 80px" :key="idx" @click="select(movie)" :class="{ 'selected': moviesStore.edited.id === movie.id, 'bg-white': !dark }">
           <q-item-section avatar>
             <q-img :src="movie.posterUrl || moviesStore.defaultPoster" :placeholder-src="moviesStore.defaultPoster" alt="Affiche non disponnible" />
           </q-item-section>
@@ -63,6 +63,7 @@ export default {
 
     const filter = ref($q.localStorage.has('filter') && $q.localStorage.getItem('filter') !== 'null' ? $q.localStorage.getItem('filter') : '')
 
+    const dark = computed(() => $q.dark.isActive)
     const movies = computed(() => {
       let filtered = $moviesStore.collection
       if (filter.value) {
@@ -110,6 +111,7 @@ export default {
     }
 
     return {
+      dark,
       filter,
       movies,
       moviesStore: $moviesStore,
